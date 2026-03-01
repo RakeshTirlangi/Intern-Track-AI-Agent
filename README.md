@@ -70,13 +70,6 @@ This is the first AI agent in the workflow.
 - Classify the email type.
 - Output structured decision data.
 
-**Input:**
-- Sender (`from`)
-- Subject
-- Email body
-- Date
-
-
 If the email is not related to internships, the workflow stops here.
 
 ---
@@ -109,13 +102,6 @@ The second AI agent in the pipeline.
 * Generate a concise and clear summary.
 * Prepare a WhatsApp-ready alert message.
 
-**Input:**
-
-* Email content
-* Sender
-* Subject
-* Classification metadata
-
 ---
 
 ### 6. WhatsApp Alert Module
@@ -129,34 +115,6 @@ The second AI agent in the pipeline.
   * Direct link to the email
 
 This ensures immediate awareness without needing to open the inbox.
-
----
-
-## Key Features
-
-* Real-time email monitoring
-* Dual AI-agent architecture
-* Internship-specific classification
-* Confidence-based filtering
-* Instant WhatsApp notifications
-* Fully automated workflow
-* Modular and extensible design
-
----
-
-## Agent Design Philosophy
-
-InternTrack AI Agent follows a multi-agent structure:
-
-### Mail Classifier Agent
-
-Handles decision-making and relevance detection.
-
-### Mail Summarizer Agent
-
-Handles summarization and human-readable alert generation.
-
-This separation improves clarity, modularity, and scalability.
 
 ---
 
@@ -181,21 +139,7 @@ This separation improves clarity, modularity, and scalability.
 * Merge and Data Transformation Nodes
 
 ---
-
-## Future Enhancements
-
-* Automatic Gmail labeling for internship emails
-* Database logging and analytics
-* Priority scoring and ranking system
-* Multi-category classification (jobs, grants, collaborations)
-* Multi-channel alerts (Telegram, Slack, SMS)
-
----
-
 ## Conclusion
 
 InternTrack AI Agent transforms email monitoring into an intelligent, proactive system.
 By combining real-time triggers with AI-driven classification and summarization, it ensures that no internship opportunity is missed - even when continuous inbox monitoring is not possible.
-
-```
-```
