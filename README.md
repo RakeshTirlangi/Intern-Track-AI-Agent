@@ -21,7 +21,7 @@ The complete working demo of **InternTrack AI Agent** is available on LinkedIn.
 
 Watch the live demonstration here:
 
-[Watch Demo Video on LinkedIn](https://your-linkedin-post-link-here)
+[Watch Demo Video on LinkedIn](https://www.linkedin.com/posts/rakesh-tirlangi_hi-the-name-of-the-project-is-interntrack-activity-7433928866747916289-YN68?utm_source=share&utm_medium=member_desktop&rcm=ACoAAEQSAHABhTXxpuGO0aVbwq9pUQ88n0xtENQ)
 
 ---
 
