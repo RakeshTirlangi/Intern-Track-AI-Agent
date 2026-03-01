@@ -1,0 +1,330 @@
+{
+  "name": "InternTrack AI Agent",
+  "nodes": [
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyHour"
+            }
+          ]
+        },
+        "filters": {}
+      },
+      "type": "n8n-nodes-base.gmailTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        160,
+        784
+      ],
+      "id": "f7e41473-b986-46b8-88b5-d2a8118fcbcb",
+      "name": "Gmail Trigger",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "tuegY6D0wSB1BZxD",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "b08d2034-6849-482a-9c1e-9e1faf3455ff",
+              "leftValue": "={{ $json.output }}",
+              "rightValue": "\"true\"",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            },
+            {
+              "id": "320a6ff5-6e6f-4806-b0ab-420e97d58698",
+              "leftValue": "={{ $json.output }}",
+              "rightValue": "\"false\"",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        800,
+        864
+      ],
+      "id": "8c678eaf-b16c-4414-b1bf-eb295e611dc1",
+      "name": "If"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        736,
+        624
+      ],
+      "id": "72a551db-1560-494d-af79-c2e4415b9925",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        304,
+        1040
+      ],
+      "id": "e9da11a3-da24-40a1-97a6-6b3a53144201",
+      "name": "Mail Classifier",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "EmTtchCGoxjKOh4f",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        1072,
+        832
+      ],
+      "id": "f43ba251-1f49-467d-9381-2ea5b0324a34",
+      "name": "Mail Summarizer",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "EmTtchCGoxjKOh4f",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "send",
+        "phoneNumberId": "=986863177846922",
+        "recipientPhoneNumber": "=919959368028",
+        "textBody": "=\"This is Internship Reminder Agent \" {{ $json.output }}\n",
+        "additionalFields": {
+          "previewUrl": false
+        }
+      },
+      "type": "n8n-nodes-base.whatsApp",
+      "typeVersion": 1.1,
+      "position": [
+        1376,
+        768
+      ],
+      "id": "1219ad1d-ac6e-427b-9242-328db9e7d735",
+      "name": "send alert",
+      "webhookId": "99393c4f-77b2-4c9b-a58f-06fe5e383986",
+      "credentials": {
+        "whatsAppApi": {
+          "id": "lSOI7TPAmtnax2WA",
+          "name": "WhatsApp account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "You are InternTrack AI.\n\nInput: You will receive a JSON array of email objects (Gmail-style). Each object may contain fields like:\n- Subject\n- From\n- snippet\n- labels (may include INBOX, UNREAD, etc.)\n\nTask:\nDecide whether the email is related to internships/placements/jobs/recruitment for AI Engineer / AI Research / LLM / ML / Data Science roles.\nExamples that should return TRUE:\n- interview invite, OA/assessment, recruiter outreach, application status, offer letter, HR communication, onboarding, background check, internship opportunity, research internship, AI/ML/LLM role updates.\nExamples that should return FALSE:\n- password/security alerts, receipts, bank statements, promotions, newsletters, social notifications, general course ads not tied to an application, unrelated marketing.\n\nDecision rule:\nReturn TRUE only if there is clear evidence it is about an internship/job/recruitment process (especially AI/ML/LLM related). If uncertain, return FALSE.\n\nOutput format rules (VERY IMPORTANT):\n- Output must be exactly one word: either `true` or `false`\n- No JSON, no code fences, no explanations, no extra characters, no punctuation, no whitespace lines.\n- If input contains multiple emails, return `true` if ANY email in the array is internship/recruitment related; otherwise return `false`.\n\nNow analyze the input and output only `true` or `false`.",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        400,
+        864
+      ],
+      "id": "3213c360-faea-4825-9519-5bdd984d69c2",
+      "name": "Mail Classifier Agent"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You are InternTrack AI – a professional email summarization assistant.\n\nYou will receive:\nSubject: {{$node[\"Gmail Trigger\"].json[\"Subject\"]}}\nFrom: {{$node[\"Gmail Trigger\"].json[\"From\"]}}\nBody: {{$node[\"Gmail Trigger\"].json[\"snippet\"]}}\nEmail ID: {{$node[\"Gmail Trigger\"].json[\"id\"]}}\n\nTask:\n1) Summarize the email body into 1–2 concise professional sentences (max 280 characters).\n2) Identify the purpose clearly (interview, offer, assessment, recruiter outreach, status update, etc.).\n3) Output MUST be formatted for WhatsApp using WhatsApp markdown:\n   - Use *bold* labels\n   - Keep it clean and readable\n   - No extra commentary, no emojis\n4) Do NOT repeat the subject verbatim in the summary.\n5) Return only the final WhatsApp message.\n\nOutput format (follow exactly):\n\n*InternTrack AI – Internship Alert*\n\n*From:* <from address>\n*Subject:* <email subject>\n*Summary:* <summarized body>\n*Open Email:* https://mail.google.com/mail/u/0/#inbox/<Email ID>",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        1040,
+        656
+      ],
+      "id": "ec6b8896-03ba-4467-998a-5082346ae116",
+      "name": "Mail Summarizer Agent"
+    }
+  ],
+  "pinData": {
+    "Merge": [
+      {
+        "json": {
+          "id": "19ca9e31eb575a60",
+          "threadId": "19ca9e31eb575a60",
+          "snippet": "Hi Rakesh, Thank you for applying to the AI Engineer Internship position focused on Large Language Models and Generative AI at NeuralStack Labs. After reviewing your profile, we are impressed with your",
+          "payload": {
+            "mimeType": "multipart/alternative"
+          },
+          "sizeEstimate": 8969,
+          "historyId": "2393482",
+          "internalDate": "1772376749000",
+          "labels": [
+            {
+              "id": "INBOX",
+              "name": "INBOX"
+            },
+            {
+              "id": "IMPORTANT",
+              "name": "IMPORTANT"
+            },
+            {
+              "id": "CATEGORY_PERSONAL",
+              "name": "CATEGORY_PERSONAL"
+            },
+            {
+              "id": "UNREAD",
+              "name": "UNREAD"
+            }
+          ],
+          "From": "N210972 TIRLANGI RAKESH <n210972@rguktn.ac.in>",
+          "Subject": "Interview Invitation – AI Engineer Internship (LLMs & Generative AI)",
+          "To": "Rakesh Tirlangi <rakeshtirlangi21@gmail.com>"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ],
+    "Mail Summarizer Agent": [
+      {
+        "json": {
+          "output": "*InternTrack AI – Internship Alert*\n\n*From:* N210972 TIRLANGI RAKESH <n210972@rguktn.ac.in>\n*Subject:* Interview Invitation – AI Engineer Internship (LLMs & Generative AI)\n*Summary:* NeuralStack Labs thanks you for your AI Engineer Internship (LLMs & Generative AI) application. They are impressed with your profile, leading to this interview invitation.\n*Open Email:* https://mail.google.com/mail/u/0/#inbox/19ca9e31eb575a60"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ]
+  },
+  "connections": {
+    "Gmail Trigger": {
+      "main": [
+        [
+          {
+            "node": "Mail Classifier Agent",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Mail Summarizer Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mail Classifier": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Mail Classifier Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mail Summarizer": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Mail Summarizer Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "send alert": {
+      "main": [
+        []
+      ]
+    },
+    "Mail Classifier Agent": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mail Summarizer Agent": {
+      "main": [
+        [
+          {
+            "node": "send alert",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "versionId": "f61d563a-ab89-45dd-9fa4-287cfba7a2a5",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "81dfd9bf9505d5e4e84a282b3c51da07f9d6c2f8414836e4c0764a9b70830a80"
+  },
+  "id": "fTiPF4rAvFX0URZJcRBQW",
+  "tags": []
+}
