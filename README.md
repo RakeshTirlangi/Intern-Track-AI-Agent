@@ -2,7 +2,7 @@
 # InternTrack AI Agent
 
 InternTrack AI Agent is a real-time, AI-powered email intelligence system built using n8n.  
-It monitors incoming emails, identifies internship-related communication using Gemini-based AI agents, and instantly sends WhatsApp alerts to ensure no opportunity is missed.
+It monitors incoming emails, identifies internship-related communication using AI agents, and instantly sends WhatsApp alerts to ensure no opportunity is missed.
 
 ---
 
@@ -10,16 +10,28 @@ It monitors incoming emails, identifies internship-related communication using G
 
 Below is the architecture of the InternTrack AI Agent workflow.
 
-![InternTrack AI Agent Architecture](assets/architecture.png)
+![InternTrack AI Agent Architecture](assets/ai-agent-architecture.png)
 
 ---
+
+
+## Demo
+
+The complete working demo of **InternTrack AI Agent** is available on LinkedIn.
+
+Watch the live demonstration here:
+
+[Watch Demo Video on LinkedIn](https://your-linkedin-post-link-here)
+
+---
+
 ## Problem Statement
 
 As a student actively applying for summer internships across companies, startups, research labs, and universities, I receive a large number of emails daily. These include interview invitations, application updates, recruiter outreach, document requests, and selection or rejection notifications.
 
 Since it is not practical to monitor email continuously, important messages can easily be overlooked among newsletters, promotions, and unrelated communication. Missing a time-sensitive internship email can directly impact career opportunities.
 
-To solve this, I developed **InternTrack AI Agent** — an autonomous, event-driven system that monitors incoming emails in real time and proactively notifies me via WhatsApp whenever an internship-related email is detected.
+To solve this, I developed **InternTrack AI Agent** - an autonomous, event-driven system that monitors incoming emails in real time and proactively notifies me via WhatsApp whenever an internship-related email is detected.
 
 ---
 
@@ -49,7 +61,7 @@ This converts passive inbox checking into proactive opportunity tracking.
 
 ---
 
-### 2. Mail Classifier Agent (Gemini)
+### 2. Mail Classifier Agent
 
 This is the first AI agent in the workflow.
 
@@ -88,7 +100,7 @@ If the email is not related to internships, the workflow stops here.
 
 ---
 
-### 5. Mail Summarizer Agent (Gemini)
+### 5. Mail Summarizer Agent
 
 The second AI agent in the pipeline.
 
@@ -167,14 +179,6 @@ This separation improves clarity, modularity, and scalability.
 * WhatsApp Business Cloud API
 * Conditional Logic Nodes
 * Merge and Data Transformation Nodes
-
----
-
-## Demo
-
-<!-- Replace with your demo video link -->
-
-[Watch Demo Video](https://your-demo-link-here)
 
 ---
 
